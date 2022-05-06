@@ -165,14 +165,14 @@ export async function createPullRequest(inputs: Inputs): Promise<void> {
     core.info(
       `Configured git author as '${parsedAuthor.name} <${parsedAuthor.email}>'`
     )
-    // print the inputs.body
-    core.info(`The pull request body is: ${inputs.body}`)
-    // print the git status
-    core.info(`The git status is: ${await git.status(['--porcelain', '-unormal'])}`)
-
     core.endGroup()
 
-    inputs.body = await git.status(['--porcelain', '-unormal'])
+    core.startGroup('Getting the files to be committed')
+    const files = await git.status(['--porcelain', '-unormal'])
+    core.info(`Found ${files.length} files to commit`)
+    core.info(`Files to commit: ${files}`)
+    core.endGroup()
+
     // Create or update the pull request branch
     core.startGroup('Create or update the pull request branch')
     const result = await createOrUpdateBranch(
