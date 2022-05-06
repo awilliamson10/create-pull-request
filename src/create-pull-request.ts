@@ -197,6 +197,12 @@ export async function createPullRequest(inputs: Inputs): Promise<void> {
     inputs.base = result.base
     inputs.body = await git.status()
 
+    // print the inputs.body
+    core.info(`The pull request body is: ${inputs.body}`)
+    // print the git status
+    core.info(`The git status is: ${await git.status()}`)
+
+
     if (result.hasDiffWithBase) {
       // Create or update the pull request
       core.startGroup('Create or update the pull request')
