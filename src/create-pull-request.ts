@@ -168,11 +168,11 @@ export async function createPullRequest(inputs: Inputs): Promise<void> {
     // print the inputs.body
     core.info(`The pull request body is: ${inputs.body}`)
     // print the git status
-    core.info(`The git status is: ${await git.status()}`)
+    core.info(`The git status is: ${await git.status(['--porcelain', '-unormal'])}`)
 
     core.endGroup()
 
-    inputs.body = await git.status()
+    inputs.body = await git.status(['--porcelain', '-unormal'])
     // Create or update the pull request branch
     core.startGroup('Create or update the pull request branch')
     const result = await createOrUpdateBranch(
