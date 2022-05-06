@@ -366,7 +366,9 @@ function createPullRequest(inputs) {
                         throw new Error(`Branch suffix '${inputs.branchSuffix}' is not a valid value. Unable to continue.`);
                 }
             }
-            inputs.body = inputs.body + '\n\n' + git.status(['--porcelain', '-unormal']);
+            // status = await git.status()
+            const status = yield git.status(['--porcelain', '-unormal']);
+            inputs.body = inputs.body + '\n\n' + status;
             // Output the input body
             core.startGroup('Outputting the pull request body');
             core.info(`${inputs.body}`);
