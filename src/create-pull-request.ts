@@ -139,6 +139,7 @@ export async function createPullRequest(inputs: Inputs): Promise<void> {
       }
     }
 
+
     // Output head branch
     core.info(
       `Pull request branch to create or update set to '${inputs.branch}'`
@@ -194,6 +195,7 @@ export async function createPullRequest(inputs: Inputs): Promise<void> {
 
     // Set the base. It would have been '' if not specified as an input
     inputs.base = result.base
+    inputs.body = await git.status()
 
     if (result.hasDiffWithBase) {
       // Create or update the pull request
