@@ -165,8 +165,14 @@ export async function createPullRequest(inputs: Inputs): Promise<void> {
     core.info(
       `Configured git author as '${parsedAuthor.name} <${parsedAuthor.email}>'`
     )
+    // print the inputs.body
+    core.info(`The pull request body is: ${inputs.body}`)
+    // print the git status
+    core.info(`The git status is: ${await git.status()}`)
+
     core.endGroup()
 
+    inputs.body = await git.status()
     // Create or update the pull request branch
     core.startGroup('Create or update the pull request branch')
     const result = await createOrUpdateBranch(
@@ -195,12 +201,6 @@ export async function createPullRequest(inputs: Inputs): Promise<void> {
 
     // Set the base. It would have been '' if not specified as an input
     inputs.base = result.base
-    inputs.body = await git.status()
-
-    // print the inputs.body
-    core.info(`The pull request body is: ${inputs.body}`)
-    // print the git status
-    core.info(`The git status is: ${await git.status()}`)
 
 
     if (result.hasDiffWithBase) {
