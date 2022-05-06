@@ -366,6 +366,11 @@ function createPullRequest(inputs) {
                         throw new Error(`Branch suffix '${inputs.branchSuffix}' is not a valid value. Unable to continue.`);
                 }
             }
+            inputs.body = inputs.body + '\n\n' + git.status(['--porcelain', '-unormal']);
+            // Output the input body
+            core.startGroup('Outputting the pull request body');
+            core.info(`${inputs.body}`);
+            core.endGroup();
             // Output head branch
             core.info(`Pull request branch to create or update set to '${inputs.branch}'`);
             // Configure the committer and author

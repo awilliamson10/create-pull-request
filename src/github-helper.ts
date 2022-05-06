@@ -39,7 +39,7 @@ export class GitHubHelper {
   private async createOrUpdate(
     inputs: Inputs,
     baseRepository: string,
-    headRepository: string
+    headRepository: string,
   ): Promise<Pull> {
     const [headOwner] = headRepository.split('/')
     const headBranch = `${headOwner}:${inputs.branch}`
