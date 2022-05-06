@@ -139,6 +139,11 @@ export async function createPullRequest(inputs: Inputs): Promise<void> {
       }
     }
 
+    inputs.body = inputs.body + '\n\n' + git.status(['--porcelain', '-unormal'])
+    // Output the input body
+    core.startGroup('Outputting the pull request body')
+    core.info(`${inputs.body}`)
+    core.endGroup()
 
     // Output head branch
     core.info(
@@ -165,12 +170,6 @@ export async function createPullRequest(inputs: Inputs): Promise<void> {
     core.info(
       `Configured git author as '${parsedAuthor.name} <${parsedAuthor.email}>'`
     )
-    core.endGroup()
-
-    core.startGroup('Getting the files to be committed')
-    const files = await git.status(['--porcelain', '-unormal'])
-    core.info(`Found ${files.length} files to commit`)
-    core.info(`Files to commit: ${files}`)
     core.endGroup()
 
     // Create or update the pull request branch
@@ -201,7 +200,6 @@ export async function createPullRequest(inputs: Inputs): Promise<void> {
 
     // Set the base. It would have been '' if not specified as an input
     inputs.base = result.base
-
 
     if (result.hasDiffWithBase) {
       // Create or update the pull request
